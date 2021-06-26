@@ -1,6 +1,7 @@
 const http = require('http');
 const url = require('url');
 const { StringDecoder } = require('string_decoder');
+const config = require('./config');
 
 const server = http.createServer(function (req,res){
   // Get the URL and parse it
@@ -52,9 +53,10 @@ const server = http.createServer(function (req,res){
      let payloadString = JSON.stringfy(payload);
 
  
-      // Send the respon
+      // Return the response
+      res.setHeader('Content-Type', 'application/json');
       res.writeHead(statusCode);
-      res.end('Hello, World\n');
+      res.end(payloadString);
     
       // Log de request path
       console.log('Request received on path: /', trimedPath);
@@ -63,8 +65,9 @@ const server = http.createServer(function (req,res){
   });
 });
 
-server.listen(3000, function() {
-  console.log('server is running on localhost:3000 ...');
+// Start the server
+server.listen(config.port, function() {
+  console.log(`${config.envName}: server is running on localhost:${config.port} ...`);
 });
 
 // Define the handlers
